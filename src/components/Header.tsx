@@ -6,8 +6,6 @@ import { useEffect, useState } from 'react';
 
 import Button from './Button';
 import GeneralButtons from './ButtonGroups/General';
-import List from './ButtonGroups/List';
-import Divider from './Divider';
 
 export default function Header() {
   const { theme, setTheme } = useTheme();
@@ -24,8 +22,8 @@ export default function Header() {
     <header className="flex justify-between border-b-2 border-slate-200 p-2 dark:border-slate-800">
       <div className="flex items-center">
         <GeneralButtons />
-        <Divider />
-        <List />
+        {/* <Divider /> */}
+        {/* <List /> */}
       </div>
       <div>
         <Button onClick={() => setTheme(isDarkMode ? 'light' : 'dark')}>
