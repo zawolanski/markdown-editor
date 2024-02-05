@@ -1,8 +1,5 @@
+import { FormatReturnObject } from './common';
 import { Selection } from './selection';
-
-export enum Command {
-  FORMAT_TEXT = 'format-text',
-}
 
 export enum TextFormatType {
   BOLD = 'bold',
@@ -32,7 +29,7 @@ export const textFormatAction = (
   selection: Selection,
   operationType: OperationType,
   type: TextFormatType,
-) => {
+): FormatReturnObject => {
   const { selectedText, textBefore, textAfter } = selection;
   const mark = textFormatConfig[type].mark;
 

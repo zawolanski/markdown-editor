@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 
 import { useEditor } from '@/hooks/useEditor';
 
@@ -11,7 +11,7 @@ import TextArea from './TextArea';
 export default function Editor() {
   const { editorState, editorRef, handleEditorStateChange } =
     useEditorContext();
-  const { onEditorStateChange } = useEditor();
+  const { onEditorStateChange, onPasteEvent } = useEditor();
 
   const keyDown = useCallback(
     (e: KeyboardEvent) => {
@@ -25,17 +25,29 @@ export default function Editor() {
     [onEditorStateChange, handleEditorStateChange],
   );
 
+  const pasteEvent = useCallback(
+    (e: ClipboardEvent) => {
+      onPasteEvent(e);
+    },
+    [onPasteEvent],
+  );
+
   useEffect(() => {
+    let ref: HTMLTextAreaElement | null = null;
+
     if (editorRef.current) {
       editorRef.current.addEventListener('keydown', keyDown);
+      editorRef.current.addEventListener('paste', pasteEvent);
+      ref = editorRef.current;
     }
 
     return () => {
-      if (editorRef.current) {
-        editorRef.current.removeEventListener('keydown', keyDown);
+      if (ref) {
+        ref.removeEventListener('keydown', keyDown);
+        ref.removeEventListener('paste', pasteEvent);
       }
     };
-  }, [editorRef, editorState, keyDown]);
+  }, [editorRef, editorState, keyDown, pasteEvent]);
 
   return (
     <>

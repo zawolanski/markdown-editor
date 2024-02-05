@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
 
 import { useEditorContext } from '@/context/EditorContext';
+import { Command } from '@/utils/common';
+import { linkFormatAction, linkFormatClipboard } from '@/utils/linkFormat';
 import { listFormatActionShortcut } from '@/utils/listFormat';
 import { getEditorSelection, selectText } from '@/utils/selection';
 import {
-  Command,
   operationType,
   textFormatAction,
   TextFormatType,
@@ -19,16 +20,21 @@ export const useEditor = () => {
     useEditorContext();
 
   const dispatchCommand = useCallback(
-    (command: Command, payload: TextFormatType) => {
+    (command: Command, payload: TextFormatType | null) => {
       if (!editorRef.current) return null;
+      const selection = getEditorSelection(editorRef.current);
 
-      if (command === Command.FORMAT_TEXT) {
-        const selection = getEditorSelection(editorRef.current);
+      if (command === Command.FORMAT_TEXT && payload !== null) {
         const { text, start, end } = textFormatAction(
           selection,
           operationType(selection, payload),
           payload,
         );
+
+        handleEditorStateChange(text);
+        setNewSelection({ end, start });
+      } else if (command === Command.LINK) {
+        const { text, start, end } = linkFormatAction(selection);
 
         handleEditorStateChange(text);
         setNewSelection({ end, start });
@@ -49,11 +55,26 @@ export const useEditor = () => {
 
       if (data === null) return null;
       const { text, end, start } = data;
-
       setNewSelection({ end, start });
       return text;
     },
     [editorRef],
+  );
+
+  const onPasteEvent = useCallback(
+    (e: ClipboardEvent) => {
+      const data = e.clipboardData?.getData('text/plain');
+      if (!editorRef.current || !data) return null;
+      const selection = getEditorSelection(editorRef.current);
+      const link = linkFormatClipboard(selection, data);
+
+      if (link === null) return null;
+      e.preventDefault();
+      const { text, end, start } = link;
+      handleEditorStateChange(text);
+      setNewSelection({ end, start });
+    },
+    [editorRef, handleEditorStateChange],
   );
 
   useEffect(() => {
@@ -63,5 +84,5 @@ export const useEditor = () => {
     }
   }, [editorRef, editorState]);
 
-  return { dispatchCommand, onEditorStateChange };
+  return { dispatchCommand, onEditorStateChange, onPasteEvent };
 };
