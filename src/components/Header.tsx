@@ -26,11 +26,11 @@ export default function Header() {
           markdown
         </h1>
         <Divider />
-        <div className="flex items-center">
+        <div className="flex items-center gap-1">
           <ActionButtons />
         </div>
       </div>
-      <div>
+      <div className="flex items-center gap-1">
         <Button onClick={() => setTheme(isDarkMode ? 'light' : 'dark')}>
           {isDarkMode ? <IconMoon /> : <IconSun />}
         </Button>

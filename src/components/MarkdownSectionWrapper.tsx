@@ -7,12 +7,14 @@ interface Props {
   children: ReactNode;
   label: string;
   hasBorder?: boolean;
+  topBarElements?: ReactNode;
 }
 
 export default function MarkdownSectionWrapper({
   children,
   label,
   hasBorder,
+  topBarElements,
 }: Props) {
   return (
     <div
@@ -21,10 +23,11 @@ export default function MarkdownSectionWrapper({
         hasBorder && 'border-r-[1px] border-zinc-500 dark:border-zinc-400',
       )}
     >
-      <div className="bg-zinc-200 p-3 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
+      <div className="flex h-11 items-center justify-between bg-zinc-200 pl-3 pr-1.5 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
         <p className="text-xs font-semibold uppercase tracking-widest">
           {label}
         </p>
+        {topBarElements}
       </div>
       {children}
     </div>
