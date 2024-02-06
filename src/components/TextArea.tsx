@@ -22,7 +22,7 @@ export default function TextArea() {
       label="markdown"
       hasBorder
       topBarElements={
-        <Button size="small" onClick={copyToClipboard}>
+        <Button size="small" onClick={copyToClipboard} tooltip="Copy">
           <IconCopy size="18" />
         </Button>
       }

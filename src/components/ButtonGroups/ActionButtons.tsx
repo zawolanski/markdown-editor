@@ -20,15 +20,16 @@ export default function ActionButtons() {
 
   return (
     <>
-      {textFormat.map(({ icon, type }) => (
+      {textFormat.map(({ icon, type, tooltip }) => (
         <Button
           key={type}
           onClick={() => handleOnClick(Command.FORMAT_TEXT, type)}
+          tooltip={tooltip}
         >
           {icon}
         </Button>
       ))}
-      <Button onClick={() => handleOnClick(Command.LINK, null)}>
+      <Button onClick={() => handleOnClick(Command.LINK, null)} tooltip="Link">
         <IconLink />
       </Button>
     </>

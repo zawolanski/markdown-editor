@@ -34,11 +34,18 @@ export default function Header() {
         </div>
       </div>
       <div className="flex items-center gap-1">
-        <Button onClick={() => setTheme(isDarkMode ? 'light' : 'dark')}>
-          {isDarkMode ? <IconMoon /> : <IconSun />}
-        </Button>
-        <Button onClick={() => handleEditorStateChange('')} type="danger">
+        <Button
+          onClick={() => handleEditorStateChange('')}
+          type="danger"
+          tooltip="Clear markdown"
+        >
           <IconTrash />
+        </Button>
+        <Button
+          onClick={() => setTheme(isDarkMode ? 'light' : 'dark')}
+          tooltip={isDarkMode ? 'Light' : 'Dark'}
+        >
+          {isDarkMode ? <IconMoon /> : <IconSun />}
         </Button>
       </div>
     </header>
