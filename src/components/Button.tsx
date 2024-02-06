@@ -11,7 +11,7 @@ export default function Button(props: ButtonProps) {
   return (
     <button
       type="button"
-      className="rounded-md p-2 text-slate-800 transition-colors hover:bg-slate-200 dark:text-slate-200 dark:hover:bg-slate-800"
+      className="rounded-md p-2 text-zinc-800 transition-colors hover:bg-zinc-200 dark:text-zinc-200 dark:hover:bg-zinc-500"
       onClick={onClick}
     >
       {children}

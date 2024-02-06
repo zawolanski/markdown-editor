@@ -7,12 +7,12 @@ import {
 
 import { TextFormatType } from '@/utils/textFormat';
 
-export interface General {
+export interface TextFormat {
   type: TextFormatType;
   icon: React.ReactNode;
 }
 
-export const general: General[] = [
+export const textFormat: TextFormat[] = [
   {
     type: TextFormatType.BOLD,
     icon: <IconBold />,

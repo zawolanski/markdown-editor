@@ -6,9 +6,9 @@ import { useEditor } from '@/hooks/useEditor';
 import { Command } from '@/utils/common';
 import { TextFormatType } from '@/utils/textFormat';
 
-import { general } from './data';
+import { textFormat } from './data';
 
-export default function GeneralButtons() {
+export default function ActionButtons() {
   const { dispatchCommand } = useEditor();
 
   const handleOnClick = useCallback(
@@ -20,7 +20,7 @@ export default function GeneralButtons() {
 
   return (
     <>
-      {general.map(({ icon, type }) => (
+      {textFormat.map(({ icon, type }) => (
         <Button
           key={type}
           onClick={() => handleOnClick(Command.FORMAT_TEXT, type)}

@@ -52,7 +52,6 @@ export default function Editor() {
   return (
     <>
       <TextArea />
-      <div className="w-[2px] bg-slate-200 dark:bg-slate-800" />
       <Markdown />
     </>
   );

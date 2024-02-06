@@ -20,7 +20,7 @@ interface Props {
 export default function RootLayout({ children }: Props) {
   return (
     <html lang="en">
-      <body className="bg-slate-50 dark:bg-slate-900" style={inter.style}>
+      <body className="bg-zinc-300 dark:bg-zinc-900" style={inter.style}>
         <Providers>{children}</Providers>
       </body>
     </html>

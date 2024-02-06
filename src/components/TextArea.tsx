@@ -3,6 +3,7 @@
 import { Roboto_Mono } from 'next/font/google';
 
 import { useEditorContext } from '../context/EditorContext';
+import MarkdownSectionWrapper from './MarkdownSectionWrapper';
 
 const robotoMono = Roboto_Mono({ subsets: ['latin'] });
 
@@ -11,12 +12,14 @@ export default function TextArea() {
     useEditorContext();
 
   return (
-    <textarea
-      value={editorState}
-      onChange={(event) => handleEditorStateChange(event.target.value)}
-      ref={editorRef}
-      style={robotoMono.style}
-      className="h-full w-2/4 resize-none bg-transparent p-2"
-    />
+    <MarkdownSectionWrapper label="markdown" hasBorder>
+      <textarea
+        value={editorState}
+        onChange={(event) => handleEditorStateChange(event.target.value)}
+        ref={editorRef}
+        style={robotoMono.style}
+        className="h-full resize-none bg-transparent p-2"
+      />
+    </MarkdownSectionWrapper>
   );
 }

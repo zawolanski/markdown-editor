@@ -5,7 +5,7 @@ export default function EditorPage() {
   return (
     <div className="flex h-screen flex-col">
       <Header />
-      <div className="flex grow justify-center">
+      <div className="flex grow justify-center overflow-hidden">
         <Editor />
       </div>
     </div>
