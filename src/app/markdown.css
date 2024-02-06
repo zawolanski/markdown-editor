@@ -23,20 +23,25 @@
   text-decoration: line-through;
 }
 
-.markdown ul, ol {
+.markdown ul:not(.contains-task-list), ol:not(.contains-task-list) {
   padding-left: 2em;
   margin-bottom: 1rem;
 }
 
-.markdown ul {
+.markdown ul.contains-task-list, ol.contains-task-list {
+  padding-left: 0.75em;
+  margin-bottom: 1rem;
+}
+
+.markdown ul:not(.contains-task-list) {
   list-style-type: disc;
 }
 
-.markdown ul ul {
+.markdown ul:not(.contains-task-list) ul {
   list-style-type: circle;
 }
 
-.markdown ul ul ul {
+.markdown ul:not(.contains-task-list) ul ul {
   list-style-type: square;
 }
 
