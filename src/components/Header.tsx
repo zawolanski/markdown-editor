@@ -1,8 +1,10 @@
 'use client';
 
-import { IconMoon, IconSun } from '@tabler/icons-react';
+import { IconMoon, IconSun, IconTrash } from '@tabler/icons-react';
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
+
+import { useEditorContext } from '@/context/EditorContext';
 
 import Button from './Button';
 import ActionButtons from './ButtonGroups/ActionButtons';
@@ -10,6 +12,7 @@ import Divider from './Divider';
 
 export default function Header() {
   const { theme, setTheme } = useTheme();
+  const { handleEditorStateChange } = useEditorContext();
   const [loaded, setLoaded] = useState(false);
   useEffect(() => {
     setLoaded(true);
@@ -33,6 +36,9 @@ export default function Header() {
       <div className="flex items-center gap-1">
         <Button onClick={() => setTheme(isDarkMode ? 'light' : 'dark')}>
           {isDarkMode ? <IconMoon /> : <IconSun />}
+        </Button>
+        <Button onClick={() => handleEditorStateChange('')} type="danger">
+          <IconTrash />
         </Button>
       </div>
     </header>
