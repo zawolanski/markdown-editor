@@ -19,8 +19,6 @@ export default function Button({
   size,
   tooltip,
 }: Props) {
-  console.log('rerender');
-
   const content = (
     <button
       type="button"

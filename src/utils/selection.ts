@@ -26,6 +26,12 @@ export const getEditorSelection = (
   };
 };
 
+export const getLengthTextInLines = (lines: string[], selectedLine: number) => {
+  return lines
+    .slice(0, selectedLine - 1)
+    .reduce((acc, line) => acc + line.length + 1, 0);
+};
+
 export const selectText = (
   editorRef: HTMLTextAreaElement,
   start: number,

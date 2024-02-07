@@ -1,7 +1,13 @@
+import { HeadingFormatPayload } from './headingFormat';
+import { TextFormatType } from './textFormat';
+
 export enum Command {
   FORMAT_TEXT = 'format-text',
   LINK = 'link',
+  HEADING = 'heading',
 }
+
+export type Payload = TextFormatType | HeadingFormatPayload | null;
 
 export interface FormatReturnObject {
   text: string;

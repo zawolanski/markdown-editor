@@ -1,7 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
 
 import { useEditorContext } from '@/context/EditorContext';
-import { Command } from '@/utils/common';
+import { Command, Payload } from '@/utils/common';
+import {
+  headingFormatAction,
+  HeadingFormatPayload,
+} from '@/utils/headingFormat';
 import { linkFormatAction, linkFormatClipboard } from '@/utils/linkFormat';
 import { listFormatActionShortcut } from '@/utils/listFormat';
 import { getEditorSelection, selectText } from '@/utils/selection';
@@ -20,21 +24,29 @@ export const useEditor = () => {
     useEditorContext();
 
   const dispatchCommand = useCallback(
-    (command: Command, payload: TextFormatType | null) => {
+    (command: Command, payload: Payload) => {
       if (!editorRef.current) return null;
       const selection = getEditorSelection(editorRef.current);
 
       if (command === Command.FORMAT_TEXT && payload !== null) {
+        const data = payload as TextFormatType;
         const { text, start, end } = textFormatAction(
           selection,
-          operationType(selection, payload),
-          payload,
+          operationType(selection, data),
+          data,
         );
 
         handleEditorStateChange(text);
         setNewSelection({ end, start });
       } else if (command === Command.LINK) {
         const { text, start, end } = linkFormatAction(selection);
+
+        handleEditorStateChange(text);
+        setNewSelection({ end, start });
+      } else if (command === Command.HEADING && payload !== null) {
+        const data = payload as HeadingFormatPayload;
+
+        const { text, start, end } = headingFormatAction(selection, data);
 
         handleEditorStateChange(text);
         setNewSelection({ end, start });

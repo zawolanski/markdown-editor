@@ -1,10 +1,10 @@
-import { IconLink } from '@tabler/icons-react';
+import { IconHeading, IconLink } from '@tabler/icons-react';
 import { useCallback } from 'react';
 
 import Button from '@/components/Button';
 import { useEditor } from '@/hooks/useEditor';
-import { Command } from '@/utils/common';
-import { TextFormatType } from '@/utils/textFormat';
+import { Command, Payload } from '@/utils/common';
+import { HeadingType } from '@/utils/headingFormat';
 
 import { textFormat } from './data';
 
@@ -12,7 +12,7 @@ export default function ActionButtons() {
   const { dispatchCommand } = useEditor();
 
   const handleOnClick = useCallback(
-    (commnad: Command, formatType: TextFormatType | null) => {
+    (commnad: Command, formatType: Payload) => {
       dispatchCommand(commnad, formatType);
     },
     [dispatchCommand],
@@ -20,6 +20,14 @@ export default function ActionButtons() {
 
   return (
     <>
+      <Button
+        onClick={() =>
+          handleOnClick(Command.HEADING, { headingType: HeadingType.H3 })
+        }
+        tooltip="Heading"
+      >
+        <IconHeading />
+      </Button>
       {textFormat.map(({ icon, type, tooltip }) => (
         <Button
           key={type}
