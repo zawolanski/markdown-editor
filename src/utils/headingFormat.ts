@@ -10,10 +10,6 @@ export enum HeadingType {
   H6,
 }
 
-export interface HeadingFormatPayload {
-  headingType: HeadingType;
-}
-
 const headingRegExp = {
   [HeadingType.H1]: /^# /,
   [HeadingType.H2]: /^## /,
@@ -27,7 +23,7 @@ const HEADING_MARK = '#';
 
 export const headingFormatAction = (
   selection: Selection,
-  { headingType }: HeadingFormatPayload,
+  headingType: HeadingType,
 ): FormatReturnObject => {
   const {
     selectedText,

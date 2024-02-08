@@ -29,7 +29,7 @@ export default function Header() {
           markdown
         </h1>
         <Divider />
-        <div className="flex items-center gap-1">
+        <div className="flex h-full items-center gap-1">
           <ActionButtons />
         </div>
       </div>

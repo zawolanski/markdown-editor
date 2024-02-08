@@ -2,10 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 
 import { useEditorContext } from '@/context/EditorContext';
 import { Command, Payload } from '@/utils/common';
-import {
-  headingFormatAction,
-  HeadingFormatPayload,
-} from '@/utils/headingFormat';
+import { headingFormatAction, HeadingType } from '@/utils/headingFormat';
 import { linkFormatAction, linkFormatClipboard } from '@/utils/linkFormat';
 import { listFormatActionShortcut } from '@/utils/listFormat';
 import { getEditorSelection, selectText } from '@/utils/selection';
@@ -44,7 +41,7 @@ export const useEditor = () => {
         handleEditorStateChange(text);
         setNewSelection({ end, start });
       } else if (command === Command.HEADING && payload !== null) {
-        const data = payload as HeadingFormatPayload;
+        const data = payload as HeadingType;
 
         const { text, start, end } = headingFormatAction(selection, data);
 

@@ -1,4 +1,4 @@
-import { HeadingFormatPayload } from './headingFormat';
+import { HeadingType } from './headingFormat';
 import { TextFormatType } from './textFormat';
 
 export enum Command {
@@ -7,7 +7,7 @@ export enum Command {
   HEADING = 'heading',
 }
 
-export type Payload = TextFormatType | HeadingFormatPayload | null;
+export type Payload = TextFormatType | HeadingType | null;
 
 export interface FormatReturnObject {
   text: string;
