@@ -1,55 +1,35 @@
 import { useCallback, useEffect, useState } from 'react';
 
 import { useEditorContext } from '@/context/EditorContext';
-import { Command, Payload } from '@/utils/common';
-import { headingFormatAction, HeadingType } from '@/utils/headingFormat';
-import { linkFormatAction, linkFormatClipboard } from '@/utils/linkFormat';
+import { linkFormatClipboard } from '@/utils/linkFormat';
 import { listFormatActionShortcut } from '@/utils/listFormat';
 import { getEditorSelection, selectText } from '@/utils/selection';
-import {
-  operationType,
-  textFormatAction,
-  TextFormatType,
-} from '@/utils/textFormat';
+
+import { handleCommand } from './helpers';
+import { DispatchCommand, NewSelection } from './types';
 
 export const useEditor = () => {
-  const [newSelection, setNewSelection] = useState<{
-    start: number;
-    end: number;
-  } | null>(null);
+  const [newSelection, setNewSelection] = useState<NewSelection | null>(null);
   const { editorRef, handleEditorStateChange, editorState } =
     useEditorContext();
 
-  const dispatchCommand = useCallback(
-    (command: Command, payload: Payload) => {
+  const handleSelection = useCallback((newSelection: NewSelection | null) => {
+    setNewSelection(newSelection);
+  }, []);
+
+  const dispatchCommand = useCallback<DispatchCommand>(
+    (command, payload) => {
       if (!editorRef.current) return null;
       const selection = getEditorSelection(editorRef.current);
 
-      if (command === Command.FORMAT_TEXT && payload !== null) {
-        const data = payload as TextFormatType;
-        const { text, start, end } = textFormatAction(
-          selection,
-          operationType(selection, data),
-          data,
-        );
-
+      const newEntry = handleCommand(command, payload, selection);
+      if (newEntry) {
+        const { text, start, end } = newEntry;
         handleEditorStateChange(text);
-        setNewSelection({ end, start });
-      } else if (command === Command.LINK) {
-        const { text, start, end } = linkFormatAction(selection);
-
-        handleEditorStateChange(text);
-        setNewSelection({ end, start });
-      } else if (command === Command.HEADING && payload !== null) {
-        const data = payload as HeadingType;
-
-        const { text, start, end } = headingFormatAction(selection, data);
-
-        handleEditorStateChange(text);
-        setNewSelection({ end, start });
+        handleSelection({ end, start });
       }
     },
-    [editorRef, handleEditorStateChange],
+    [editorRef, handleEditorStateChange, handleSelection],
   );
 
   const onEditorStateChange = useCallback(
@@ -64,10 +44,10 @@ export const useEditor = () => {
 
       if (data === null) return null;
       const { text, end, start } = data;
-      setNewSelection({ end, start });
+      handleSelection({ end, start });
       return text;
     },
-    [editorRef],
+    [editorRef, handleSelection],
   );
 
   const onPasteEvent = useCallback(
@@ -81,17 +61,17 @@ export const useEditor = () => {
       e.preventDefault();
       const { text, end, start } = link;
       handleEditorStateChange(text);
-      setNewSelection({ end, start });
+      handleSelection({ end, start });
     },
-    [editorRef, handleEditorStateChange],
+    [editorRef, handleEditorStateChange, handleSelection],
   );
 
   useEffect(() => {
     if (editorRef.current && newSelection !== null) {
       selectText(editorRef.current, newSelection.start, newSelection.end);
-      setNewSelection(null);
+      handleSelection(null);
     }
-  }, [editorRef, editorState]);
+  }, [editorRef, editorState, handleSelection, newSelection]);
 
   return { dispatchCommand, onEditorStateChange, onPasteEvent };
 };

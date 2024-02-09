@@ -7,6 +7,12 @@ export enum Command {
   HEADING = 'heading',
 }
 
+export interface CommandPayload {
+  [Command.FORMAT_TEXT]: TextFormatType;
+  [Command.LINK]: null;
+  [Command.HEADING]: HeadingType;
+}
+
 export type Payload = TextFormatType | HeadingType | null;
 
 export interface FormatReturnObject {

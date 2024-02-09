@@ -8,17 +8,16 @@ import {
   IconStrikethrough,
 } from '@tabler/icons-react';
 
-import { Payload } from '@/utils/common';
 import { HeadingType } from '@/utils/headingFormat';
 import { TextFormatType } from '@/utils/textFormat';
 
-export interface Format {
-  type: Payload;
+export interface Format<T> {
+  type: T;
   icon: React.ReactNode;
   tooltip?: string;
 }
 
-export const headingFormat: Format[] = [
+export const headingFormat: Format<HeadingType>[] = [
   {
     type: HeadingType.H1,
     icon: <IconH1 />,
@@ -36,7 +35,7 @@ export const headingFormat: Format[] = [
   },
 ];
 
-export const textFormat: Format[] = [
+export const textFormat: Format<TextFormatType>[] = [
   {
     type: TextFormatType.BOLD,
     icon: <IconBold />,
