@@ -1,53 +1,18 @@
-'use client';
-
-import { IconMoon, IconSun, IconTrash } from '@tabler/icons-react';
-import { useTheme } from 'next-themes';
-import { useEffect, useState } from 'react';
-
-import { useEditorContext } from '@/context/EditorContext';
-
-import Button from './Button';
 import ActionButtons from './ButtonGroups/ActionButtons';
 import Divider from './Divider';
+import HeaderTrailingButtons from './HeaderTrailingButtons';
 
-export default function Header() {
-  const { theme, setTheme } = useTheme();
-  const { handleEditorStateChange } = useEditorContext();
-  const [loaded, setLoaded] = useState(false);
-  useEffect(() => {
-    setLoaded(true);
-  }, [setLoaded]);
+const Header = () => (
+  <header className="flex items-center justify-between bg-zinc-100 p-3 dark:bg-zinc-700">
+    <div className="flex h-full items-center">
+      <h1 className="mx-1 h-fit font-bold uppercase tracking-[0.5rem] text-zinc-800 dark:text-zinc-200">
+        markdown
+      </h1>
+      <Divider />
+      <ActionButtons />
+    </div>
+    <HeaderTrailingButtons />
+  </header>
+);
 
-  const isDarkMode = theme === 'dark';
-
-  if (!loaded) return null;
-
-  return (
-    <header className="flex items-center justify-between bg-zinc-100 p-3 dark:bg-zinc-700">
-      <div className="flex h-full items-center">
-        <h1 className="mx-1 h-fit font-bold uppercase tracking-[0.5rem] text-zinc-800 dark:text-zinc-200">
-          markdown
-        </h1>
-        <Divider />
-        <div className="flex h-full items-center gap-1">
-          <ActionButtons />
-        </div>
-      </div>
-      <div className="flex items-center gap-1">
-        <Button
-          onClick={() => handleEditorStateChange('')}
-          type="danger"
-          tooltip="Clear markdown"
-        >
-          <IconTrash />
-        </Button>
-        <Button
-          onClick={() => setTheme(isDarkMode ? 'light' : 'dark')}
-          tooltip={isDarkMode ? 'Light' : 'Dark'}
-        >
-          {isDarkMode ? <IconMoon /> : <IconSun />}
-        </Button>
-      </div>
-    </header>
-  );
-}
+export default Header;

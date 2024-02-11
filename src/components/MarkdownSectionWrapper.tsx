@@ -1,5 +1,3 @@
-'use client';
-
 import { clsx } from 'clsx/lite';
 import { ReactNode } from 'react';
 
@@ -10,12 +8,12 @@ interface Props {
   topBarElements?: ReactNode;
 }
 
-export default function MarkdownSectionWrapper({
+const MarkdownSectionWrapper = ({
   children,
   label,
   hasBorder,
   topBarElements,
-}: Props) {
+}: Props) => {
   return (
     <div
       className={clsx(
@@ -32,4 +30,6 @@ export default function MarkdownSectionWrapper({
       {children}
     </div>
   );
-}
+};
+
+export default MarkdownSectionWrapper;

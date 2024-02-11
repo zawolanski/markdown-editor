@@ -12,13 +12,7 @@ interface Props {
   tooltip?: string;
 }
 
-export default function Button({
-  children,
-  onClick,
-  type,
-  size,
-  tooltip,
-}: Props) {
+const Button = ({ children, onClick, type, size, tooltip }: Props) => {
   const content = (
     <button
       type="button"
@@ -40,4 +34,6 @@ export default function Button({
   ) : (
     <>{content}</>
   );
-}
+};
+
+export default Button;

@@ -1,3 +1,5 @@
+'use client';
+
 import { IconLink } from '@tabler/icons-react';
 
 import Button from '@/components/Button';
@@ -7,11 +9,11 @@ import { Command } from '@/utils/common';
 import Divider from '../Divider';
 import { headingFormat, textFormat } from './data';
 
-export default function ActionButtons() {
+export const ActionButtons = () => {
   const { dispatchCommand } = useEditor();
 
   return (
-    <>
+    <div className="flex h-full items-center gap-1">
       {headingFormat.map(({ icon, type, tooltip }) => (
         <Button
           key={type}
@@ -37,6 +39,8 @@ export default function ActionButtons() {
       >
         <IconLink />
       </Button>
-    </>
+    </div>
   );
-}
+};
+
+export default ActionButtons;
