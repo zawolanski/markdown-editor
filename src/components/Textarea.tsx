@@ -12,37 +12,39 @@ import { RootState } from '@/store/store';
 const robotoMono = Roboto_Mono({ subsets: ['latin'] });
 
 const Textarea = () => {
+  const dispatch = useDispatch();
   const content = useSelector((state: RootState) => state.editor.content);
   const { onEditorStateChange, onPasteEvent } = useEditor();
-
   const { editorRef } = useEditorContext();
 
-  const dispatch = useDispatch();
+  const handleChange = useCallback(
+    (event: ChangeEvent<HTMLTextAreaElement>) => {
+      dispatch(setContent(event.target.value));
+    },
+    [dispatch],
+  );
 
-  const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-    dispatch(setContent(event.target.value));
-  };
+  const handleSelect = useCallback(
+    (event: SyntheticEvent<HTMLTextAreaElement>) => {
+      const target = event.target as HTMLTextAreaElement;
+      const selectionStart = target?.selectionStart;
+      const selectionEnd = target?.selectionEnd;
 
-  const handleSelect = (event: SyntheticEvent<HTMLTextAreaElement>) => {
-    const target = event.target as HTMLTextAreaElement;
-    const selectionStart = target?.selectionStart;
-    const selectionEnd = target?.selectionEnd;
-
-    if (selectionStart && selectionEnd) {
-      dispatch(setSelection({ selectionEnd, selectionStart }));
-    }
-  };
+      if (selectionStart && selectionEnd) {
+        dispatch(setSelection({ selectionEnd, selectionStart }));
+      }
+    },
+    [dispatch],
+  );
 
   const keyDown = useCallback(
     (e: KeyboardEvent) => {
       const target = e.target as HTMLTextAreaElement;
-
       if (target?.value && e.key === 'Enter') {
-        const text = onEditorStateChange(e);
-        if (text) dispatch(setContent(text));
+        onEditorStateChange(e);
       }
     },
-    [onEditorStateChange, dispatch],
+    [onEditorStateChange],
   );
 
   const pasteEvent = useCallback(
@@ -67,7 +69,7 @@ const Textarea = () => {
         ref.removeEventListener('paste', pasteEvent);
       }
     };
-  }, [editorRef, content, keyDown, pasteEvent]);
+  }, [editorRef, keyDown, pasteEvent]);
 
   return (
     <textarea

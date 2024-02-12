@@ -1,3 +1,5 @@
+import { ElementRef, RefObject } from 'react';
+
 export interface Selection {
   start: number;
   end: number;
@@ -33,10 +35,12 @@ export const getLengthTextInLines = (lines: string[], selectedLine: number) => {
 };
 
 export const selectText = (
-  editorRef: HTMLTextAreaElement,
+  editorRef: RefObject<ElementRef<'textarea'>>,
   start: number,
   end: number,
 ) => {
-  editorRef.setSelectionRange(start, end);
-  editorRef.focus();
+  if (!editorRef.current) return;
+
+  editorRef.current.setSelectionRange(start, end);
+  editorRef.current.focus();
 };

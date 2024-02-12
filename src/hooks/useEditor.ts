@@ -1,46 +1,38 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useCallback } from 'react';
+import { useDispatch } from 'react-redux';
 
 import { useEditorContext } from '@/context/EditorContext';
 import { setContent } from '@/store/editorSlice';
-import { RootState } from '@/store/store';
 import { linkFormatClipboard } from '@/utils/linkFormat';
 import { listFormatActionShortcut } from '@/utils/listFormat';
 import { getEditorSelection, selectText } from '@/utils/selection';
 
 import { handleCommand } from './helpers';
-import { DispatchCommand, NewSelection } from './types';
+import { DispatchCommand } from './types';
 
 export const useEditor = () => {
-  const [newSelection, setNewSelection] = useState<NewSelection | null>(null);
   const { editorRef } = useEditorContext();
-
-  const content = useSelector((state: RootState) => state.editor.content);
   const dispatch = useDispatch();
 
-  const handleSelection = useCallback((newSelection: NewSelection | null) => {
-    setNewSelection(newSelection);
-  }, []);
-
   const dispatchCommand = useCallback<DispatchCommand>(
-    (command, payload) => {
+    async (command, payload) => {
       if (!editorRef.current) return null;
       const selection = getEditorSelection(editorRef.current);
 
       const newEntry = handleCommand(command, payload, selection);
       if (newEntry) {
         const { text, start, end } = newEntry;
-        dispatch(setContent(text));
-        handleSelection({ end, start });
+        await dispatch(setContent(text));
+        selectText(editorRef, start, end);
       }
     },
-    [editorRef, dispatch, handleSelection],
+    [editorRef, dispatch],
   );
 
   const onEditorStateChange = useCallback(
-    (e: KeyboardEvent) => {
+    async (e: KeyboardEvent) => {
       if (!editorRef.current) return null;
 
       const data = listFormatActionShortcut(
@@ -51,14 +43,14 @@ export const useEditor = () => {
 
       if (data === null) return null;
       const { text, end, start } = data;
-      handleSelection({ end, start });
-      return text;
+      await dispatch(setContent(text));
+      selectText(editorRef, start, end);
     },
-    [editorRef, handleSelection],
+    [dispatch, editorRef],
   );
 
   const onPasteEvent = useCallback(
-    (e: ClipboardEvent) => {
+    async (e: ClipboardEvent) => {
       const data = e.clipboardData?.getData('text/plain');
       if (!editorRef.current || !data) return null;
       const selection = getEditorSelection(editorRef.current);
@@ -67,18 +59,11 @@ export const useEditor = () => {
       if (link === null) return null;
       e.preventDefault();
       const { text, end, start } = link;
-      dispatch(setContent(text));
-      handleSelection({ end, start });
+      await dispatch(setContent(text));
+      selectText(editorRef, start, end);
     },
-    [dispatch, editorRef, handleSelection],
+    [dispatch, editorRef],
   );
-
-  useEffect(() => {
-    if (editorRef.current && newSelection !== null) {
-      selectText(editorRef.current, newSelection.start, newSelection.end);
-      handleSelection(null);
-    }
-  }, [editorRef, content, handleSelection, newSelection]);
 
   return { dispatchCommand, onEditorStateChange, onPasteEvent };
 };
